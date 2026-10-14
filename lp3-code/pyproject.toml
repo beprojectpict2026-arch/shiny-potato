@@ -1,0 +1,13 @@
+[project]
+name = "lp3-code"
+version = "0.1.0"
+description = "LP3 lab assignments: DAA (C++), Machine Learning (Jupyter notebooks), Blockchain (Solidity)"
+requires-python = ">=3.14"
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "matplotlib",
+    "seaborn",
+    "jupyterlab",
+]
