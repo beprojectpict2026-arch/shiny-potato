@@ -1,5 +1,13 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
+
+# Secrets
+.env
+
+# OS/editor junk
 .DS_Store
 Thumbs.db
+.vscode/
+.idea/
