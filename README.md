@@ -14,7 +14,7 @@ Lab manuals and solutions for Laboratory Practice III and IV.
 
 Each folder has its own file layout and run instructions: see [`lp3-code/README.md`](lp3-code/README.md) for LP III. Every program starts with a short comment or docstring (problem statement, libraries used, driver), and none of them asks for input while running.
 
-## LP IV (Python, standard library only)
+## LP IV (Python; standard library only, except `ir/a4` uses Scrapy)
 
 ```
 cd lp4-code
@@ -24,7 +24,7 @@ uv run python csdf/a1.py        # run any script the same way
 | Subject | Files |
 |---|---|
 | Cyber Security & Digital Forensics (`csdf/`) | `a1` email header analysis, `a2` CAPTCHA, `a5` log correlation, `mini_image_forensics` image forensics tool; `a3_a4_guide.md` explains Wi-Fi attack detection and file/partition recovery (hardware needed, so no code) |
-| Information Retrieval (`ir/`) | `a1` text similarity, `a2` PageRank, `a3` map-reduce character count, `a4` web crawler, `a5` XML web graph + topic-specific PageRank, `mini_document_summarization` |
+| Information Retrieval (`ir/`) | `a1` text similarity, `a2` PageRank, `a3` map-reduce character count, `a4` web crawler (Scrapy), `a5` XML web graph + topic-specific PageRank, `mini_document_summarization` |
 
 ## LP III
 

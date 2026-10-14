@@ -1,23 +1,22 @@
-"""IR Assignment 4 - Implement a simple web crawler.
+"""IR Assignment 4 - Implement a simple web crawler (using Scrapy).
 
-Problem statement: starting from a seed URL, download pages, extract the links, and
-visit them breadth-first up to a depth limit, staying on the same site, avoiding
-repeats and recording each page's title and outgoing links.
+Problem statement: starting from a seed URL, download pages, follow the links
+breadth-first up to a depth limit, stay on the same site, skip repeated URLs and
+record each page's title and number of links.
 
-New libs used (all standard library): urllib (download + URL joining), html.parser
-(link/title extraction), http.server + threading (a local test website so the
-crawl needs no internet).
+New lib used: scrapy (pip install scrapy / uv sync). Scrapy handles downloading,
+the request queue and duplicate filtering; we only write the spider's parse().
+Standard library: http.server + threading (a local test website, so no internet).
 
-Driver: starts a local demo site of 6 pages on a free port, crawls it from the
-home page with max depth 2 and prints the crawl tree. No input is taken at runtime.
+Driver: starts a local demo site of 6 pages, crawls it from the home page with
+max depth 2 and prints what was crawled. No input is taken at runtime.
 """
 
 import threading
-from collections import deque
-from html.parser import HTMLParser
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from urllib.parse import urldefrag, urljoin, urlparse
-from urllib.request import urlopen
+
+import scrapy
+from scrapy.crawler import CrawlerProcess
 
 # ---- demo website: path -> html ---------------------------------------------
 SITE = {
@@ -43,48 +42,38 @@ class SiteHandler(BaseHTTPRequestHandler):
 
 
 # ---- crawler ----------------------------------------------------------------
-class PageParser(HTMLParser):
-    """Collects the <title> text and all <a href> links of one page."""
-
-    def __init__(self):
-        super().__init__()
-        self.links, self.title, self._in_title = [], "", False
-
-    def handle_starttag(self, tag, attrs):
-        if tag == "a":
-            href = dict(attrs).get("href")
-            if href:
-                self.links.append(href)
-        self._in_title = tag == "title"
-
-    def handle_data(self, data):
-        if self._in_title:
-            self.title += data
-
-    def handle_endtag(self, tag):
-        self._in_title = False
+pages = []  # one record per crawled page, filled by the spider
 
 
-def crawl(seed, max_depth=2):
-    """Breadth-first crawl. Returns {url: (depth, title, [links])}."""
-    site = urlparse(seed).netloc
-    queue, visited, result = deque([(seed, 0)]), {seed}, {}
-    while queue:
-        url, depth = queue.popleft()
-        try:
-            html = urlopen(url, timeout=5).read().decode(errors="replace")
-        except OSError:
-            continue
-        parser = PageParser()
-        parser.feed(html)
-        links = [urldefrag(urljoin(url, href))[0] for href in parser.links]
-        result[url] = (depth, parser.title.strip(), links)
-        if depth < max_depth:
-            for link in links:
-                if urlparse(link).netloc == site and link not in visited:  # same site, not seen
-                    visited.add(link)
-                    queue.append((link, depth + 1))
-    return result
+class SimpleCrawler(scrapy.Spider):
+    name = "simple_crawler"
+    allowed_domains = ["127.0.0.1"]  # stay on this site (external links are dropped)
+
+    def __init__(self, start_url, **kwargs):
+        super().__init__(**kwargs)
+        self.start_urls = [start_url]
+
+    def parse(self, response):
+        links = response.css("a::attr(href)").getall()
+        pages.append({
+            "url": response.url,
+            "depth": response.meta["depth"],
+            "title": (response.css("title::text").get() or "").strip(),
+            "links": len(links),
+        })
+        for href in links:
+            yield response.follow(href, callback=self.parse)  # repeats are skipped by Scrapy
+
+
+SETTINGS = {
+    "DEPTH_LIMIT": 2,                 # max link-hops from the seed page
+    "ROBOTSTXT_OBEY": False,          # our local demo site has no robots.txt
+    "CONCURRENT_REQUESTS": 1,         # one page at a time, so output order is stable
+    "DEPTH_PRIORITY": 1,              # the next three lines make the crawl breadth-first
+    "SCHEDULER_DISK_QUEUE": "scrapy.squeues.PickleFifoDiskQueue",
+    "SCHEDULER_MEMORY_QUEUE": "scrapy.squeues.FifoMemoryQueue",
+    "LOG_LEVEL": "ERROR",
+}
 
 
 def main():
@@ -92,13 +81,17 @@ def main():
     threading.Thread(target=server.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{server.server_port}"
 
-    pages = crawl(base + "/", max_depth=2)
-    print(f"Crawled {len(pages)} pages (max depth 2) from {base}/")
-    for url, (depth, title, links) in pages.items():
-        print(f"{'  ' * depth}[d{depth}] {url.replace(base, '') or '/':<10} title={title!r:<10} links={len(links)}")
-    skipped = {"/deep"} - {u.replace(base, "") for u in pages}
-    print("Not crawled (beyond depth limit):", sorted(skipped))
+    process = CrawlerProcess(settings=SETTINGS)
+    process.crawl(SimpleCrawler, start_url=base + "/")
+    process.start()  # runs the crawl and blocks until it finishes
     server.shutdown()
+
+    print(f"Crawled {len(pages)} pages (max depth 2) from {base}/")
+    for p in sorted(pages, key=lambda p: (p["depth"], p["url"])):
+        path = p["url"].replace(base, "") or "/"
+        print(f"{'  ' * p['depth']}[d{p['depth']}] {path:<10} title={p['title']!r:<10} links={p['links']}")
+    crawled = {p["url"].replace(base, "") for p in pages}
+    print("Not crawled (beyond depth limit):", sorted(set(SITE) - crawled))
 
 
 if __name__ == "__main__":

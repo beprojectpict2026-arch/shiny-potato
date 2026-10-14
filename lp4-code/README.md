@@ -1,7 +1,7 @@
 # LP4 (410247) - Laboratory Practice IV
 
 Solutions for Cyber Security & Digital Forensics (`csdf/`) and Information Retrieval (`ir/`).
-Python 3.14, **standard library only** (no packages to install). Every script starts with a docstring (problem statement, libraries used, driver) and runs without any input.
+Python 3.14, standard library only, except `ir/a4.py` which uses **Scrapy**. Every script starts with a docstring (problem statement, libraries used, driver) and runs without any input.
 
 ## Run
 
@@ -10,7 +10,7 @@ cd lp4-code
 uv run python csdf/a1.py        # any script works the same way
 ```
 
-Without uv: `python csdf/a1.py` (Python 3.14).
+Without uv: `python csdf/a1.py` (Python 3.14). For `ir/a4.py` run `uv sync` first (or `pip install scrapy`).
 
 ## Cyber Security and Digital Forensics (`csdf/`)
 
@@ -29,7 +29,7 @@ Without uv: `python csdf/a1.py` (Python 3.14).
 | `a1.py` | 1. Text similarity | TF and TF-IDF cosine similarity and Jaccard similarity between documents |
 | `a2.py` | 2. PageRank | Power-iteration PageRank (damping 0.85, dangling pages handled) on a 5-page graph |
 | `a3.py` | 3. Map-reduce | Case-insensitive letter count with map, shuffle and reduce phases |
-| `a4.py` | 4. Web crawler | Breadth-first crawler with a depth limit, run against a small local test site (no internet needed) |
+| `a4.py` | 4. Web crawler | Scrapy spider: breadth-first, depth limit, same-site only, run against a small local test site (no internet needed) |
 | `a5.py` | 5. XML web graph | Parses XML pages into a web graph and computes ordinary and topic-specific PageRank |
 | `mini_document_summarization.py` | Mini-project: summarization | Extractive summaries by word frequency and TextRank, with compression ratios |
 
