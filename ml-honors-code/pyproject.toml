@@ -1,11 +1,16 @@
 [project]
 name = "ml-honors-code"
 version = "0.1.0"
-description = "ML honors lab assignments: neural networks, Hebb net, Twitter text analysis"
+description = "ML honors lab assignments: neural networks, Hebbnet, Twitter text analysis"
 requires-python = ">=3.14"
 dependencies = [
-    "pandas",
     "numpy",
+    "pandas",
     "scikit-learn",
     "matplotlib",
+    "tensorflow",
+    "kagglehub",
+    "ann_visualizer",
+    "graphviz",
+    "ipykernel",
 ]
