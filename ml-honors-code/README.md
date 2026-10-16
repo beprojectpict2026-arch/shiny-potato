@@ -1,29 +1,27 @@
 # ML Honors - Practical assignments
 
-Neural networks and text analysis in Python 3.14 with pandas, scikit-learn and matplotlib. Every script starts with a docstring (problem statement, libraries, driver), runs without any input and saves its plots in `outputs/`.
+One Jupyter notebook per assignment. Each notebook starts with the name, roll no, problem statement, dataset and requirements, followed by the code and its output, so it can be exported as the PDF to submit.
 
-## Run
-
-```
-cd ml-honors-code
-uv sync
-uv run python a3.py        # any script works the same way
-```
-
-The Kaggle datasets are not in git: download them first, as listed in [`data/README.md`](data/README.md). A script that cannot find its CSV stops with a message saying which file is missing.
-
-| File | Assignment | Data | What it does |
+| Notebook | Assignment | Data | Libraries |
 |---|---|---|---|
-| `a1.py` | 1. Create and visualize a neural network | `data/diabetes.csv` | Trains a small MLP (8-8-4-1), prints metrics, draws the loss curve and the network diagram |
-| `a2.py` | 2. Optical character recognition with ANN | built into scikit-learn | Reads 8x8 handwritten digits with an MLP, prints accuracy and confusion matrix, saves sample predictions |
-| `a3.py` | 3. Logic gates with Hebbnet | none | Hebb rule on bipolar AND, OR, NAND, NOR, and shows that XOR fails |
-| `a4.py` | 4. Sentiment classification with KNN | `data/Tweets.csv` | TF-IDF + KNN on tweets, K chosen by cross-validation |
-| `a5.py` | 5. Exploratory analysis of Twitter text | `data/Tweets.csv` | Statistics, text pre-processing, Zipf's law, Heaps' law and LDA topics |
-| `a6.py` | 6. Positive / negative documents from polarity words | `data/Tweets.csv` | Naive Bayes on word counts compared with a hand-made polarity word list, lists strongest polarity words |
+| `a1.ipynb` | 1. Create and visualize a neural network | `data/diabetes.csv` (Pima Indians Diabetes, Kaggle) | Keras, ANN Visualizer, Graphviz |
+| `a2.ipynb` | 2. Optical character recognition with ANN | MNIST digits (loaded by Keras) | Keras |
+| `a3.ipynb` | 3. Logic gates with Hebbnet | none | plain Python |
+| `a4.ipynb` | 4. Sentiment classification with KNN | `data/Tweets.csv` (Twitter US Airline Sentiment, Kaggle) | scikit-learn |
+| `a5.ipynb` | 5. Exploratory analysis of Twitter text (pre-processing, Zipf, Heaps, topics) | `data/Tweets.csv` | scikit-learn |
+| `a6.ipynb` | 6. Positive / negative documents from polarity words | `data/Tweets.csv` | scikit-learn |
 
 The numbers follow the assignment list (Sr. No 5 is the exploratory analysis and Sr. No 4 is the KNN classifier).
 
+## Data
+
+The two CSV files are not stored in git. Download them from Kaggle and save them as `data/diabetes.csv` and `data/Tweets.csv` inside this folder. The notebooks read them with the relative path `data/...`, so open each notebook from this folder (in Colab, upload the CSVs into a `data` folder first).
+
+## Export to PDF
+
+Run all cells, then print the notebook to PDF from the browser or editor (outputs and plots are kept).
+
 ## Notes
 
-- Keras and the ANN visualizer are not used. Networks are built with scikit-learn's `MLPClassifier` and the diagram in `a1.py` is drawn with matplotlib, so nothing beyond the four packages in `pyproject.toml` is needed.
-- Scripts were tested on Python 3.13 with stand-in CSV files of the same format, not with the real Kaggle files.
+- `a3` to `a6` are saved with their output. `a1` needs TensorFlow, so run it once before exporting.
+- `a1` uses `ann_visualizer`, an old library that may fail on the newest Keras. If it does, the rest of the notebook is unaffected.

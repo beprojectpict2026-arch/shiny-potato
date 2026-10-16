@@ -11,7 +11,7 @@ Lab manuals and solutions for Laboratory Practice III and IV.
 | [`lab_manual_lp4.pdf`](lab_manual_lp4.pdf) | LP IV schedule: Cyber Security & Digital Forensics, Information Retrieval |
 | [`lp3-code/`](lp3-code) | LP III solutions: `daa/` (C++), `ml/` (Jupyter notebooks), `bt/` (Solidity) |
 | [`lp4-code/`](lp4-code) | LP IV solutions: `csdf/` and `ir/` (Python) |
-| [`ml-honors-code/`](ml-honors-code) | ML honors solutions: neural networks, Hebbnet, Twitter text analysis (Python, Kaggle data) |
+| [`ml-honors-code/`](ml-honors-code) | ML honors solutions as Jupyter notebooks: neural networks, Hebbnet, Twitter text analysis |
 
 Each folder has its own file layout and run instructions: see the README inside each folder. Every program starts with a short comment or docstring (problem statement, libraries used, driver), and none of them asks for input while running.
 

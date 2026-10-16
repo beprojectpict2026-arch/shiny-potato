@@ -1,6 +1,6 @@
 .venv/
 __pycache__/
 *.pyc
-outputs/
-data/*
-!data/README.md
+.ipynb_checkpoints/
+network.gv*
+data/*.csv
