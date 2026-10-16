@@ -2,7 +2,7 @@
 name = "lp4-code"
 version = "0.1.0"
 requires-python = ">=3.14"
-dependencies = ["scrapy"]
+dependencies = ["scrapy", "nltk"]
 
 [dependency-groups]
 dev = ["pytest"]

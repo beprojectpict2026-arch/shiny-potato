@@ -1,0 +1,8 @@
+Search engines have changed the way people find information on the internet. 
+A search engine crawls billions of web pages and stores them in a large index. 
+When a user types a query, the search engine matches the query with the indexed pages 
+and ranks the results by relevance. 
+Ranking algorithms such as PageRank use the link structure of the web to estimate the importance of each page. 
+Pages that are linked from many important pages receive a higher rank. 
+Modern search engines also use machine learning to understand the intent behind a query. 
+My neighbour bought a new bicycle last week. Evaluation of a search engine is done with measures such as precision and recall, which compare the retrieved documents with the documents that are actually relevant. Summarization helps users because it shows the key points of a long document in a few sentences, saving the reading time of the user. Extractive summarization selects the most important sentences from the original text without rewriting them.

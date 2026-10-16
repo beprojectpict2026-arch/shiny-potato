@@ -1,7 +1,7 @@
 # LP4 (410247) - Laboratory Practice IV
 
 Solutions for Cyber Security & Digital Forensics (`csdf/`) and Information Retrieval (`ir/`).
-Python 3.14, standard library only, except `ir/a4.py` and `ir/a4_real_site.py` which use **Scrapy**. Every script starts with a docstring (problem statement, libraries used, driver) and runs without any input.
+Python 3.14, standard library only, except `ir/a4.py` and `ir/a4_real_site.py` which use **Scrapy**, and the IR mini-project which uses **NLTK**. Every script starts with a docstring (problem statement, libraries used, driver) and runs without any input.
 
 ## Run
 
@@ -32,7 +32,7 @@ Without uv: `python csdf/a1.py` (Python 3.14). For the crawlers run `uv sync` fi
 | `a4.py` | 4. Web crawler | Scrapy spider: breadth-first, depth limit, same-site only, run against a small local test site (no internet needed) |
 | `a4_real_site.py` | 4. Web crawler (real site) | Same spider for a live website: robots.txt respected, polite delay, page limit, saves `pages.json` (needs internet) |
 | `a5.py` | 5. XML web graph | Parses XML pages into a web graph and computes ordinary and topic-specific PageRank |
-| `mini_document_summarization.py` | Mini-project: summarization | Extractive summaries by word frequency and TextRank, with compression ratios |
+| `mini_project/` | Mini-project: summarization | NLTK-based extractive summaries by word frequency and TextRank on text files in `articles/`, with compression ratios and pytest tests |
 
 ## Image forensics mini-project (`csdf/mini_project/`)
 
@@ -43,6 +43,17 @@ uv run pytest csdf/mini_project -s                # tests; set image_path in tes
 ```
 
 Uploads from the web page are saved in `csdf/mini_project/images/`. Without uv: `python csdf/mini_project/web_app.py` and `pip install pytest`, then `python -m pytest csdf/mini_project -s`.
+
+## Document summarization mini-project (`ir/mini_project/`)
+
+```
+cd lp4-code
+uv sync
+uv run python ir/mini_project/summarize.py       # set article_path at the top to use another .txt file
+uv run pytest ir/mini_project -s
+```
+
+The first run downloads two small NLTK data packages (`punkt_tab`, `stopwords`), so it needs internet once.
 
 ## Notes
 
