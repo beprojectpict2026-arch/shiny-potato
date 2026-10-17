@@ -1,7 +1,7 @@
 # LP4 (410247) - Laboratory Practice IV
 
 Solutions for Cyber Security & Digital Forensics (`csdf/`) and Information Retrieval (`ir/`).
-Python 3.14, standard library only, except `ir/a4.py` and `ir/a4_real_site.py` which use **Scrapy**, and the IR mini-project which uses **NLTK**. Every script starts with a docstring (problem statement, libraries used, driver) and runs without any input.
+Python 3.14, standard library only, except `ir/a4.py` and `ir/a4_real_site.py` which use **Scrapy**, and the IR mini-project which uses **NLTK**. Every script starts with a docstring (problem statement, libraries used, input) and runs without any typing. Scripts that analyse a document read it from a `data/` folder next to them (`csdf/data/`, `ir/data/`); change the path variable at the top to use your own file.
 
 ## Run
 
@@ -57,6 +57,7 @@ The first run downloads two small NLTK data packages (`punkt_tab`, `stopwords`),
 
 ## Notes
 
-- All data in the scripts is embedded sample data, so results are repeatable.
+- Input files: `csdf/a1.py` reads `csdf/data/*.eml`, `csdf/a5.py` reads `csdf/data/sample.log`, `ir/a1.py` reads `ir/data/doc*.txt`, `ir/a2.py` reads `ir/data/graph.txt`, `ir/a3.py` reads `ir/data/dataset.txt`, `ir/a5.py` reads `ir/data/pages.xml`. The sample files are fixed, so results are repeatable.
+- `csdf/a2.py`, `ir/a4.py` and `ir/a4_real_site.py` need no input file (a seed, a built-in demo site and a URL).
 - `ir/a4_real_site.py` writes `pages.json` in the folder you run it from.
 - `csdf/a2.py` writes `captcha_sample.png` next to the script each time it runs.

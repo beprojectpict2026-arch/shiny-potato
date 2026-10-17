@@ -6,18 +6,24 @@ link to p, with damping factor d = 0.85 and handling of dangling pages.
 
 New libs used: none (pure Python standard library).
 
-Driver: a small 5-page web graph is ranked by power iteration until convergence.
-No input is taken at runtime.
+Input: the web graph is read from graph_path (data/graph.txt, one line per page like
+'A: B C') and ranked by power iteration until convergence.
 """
 
-# page -> list of pages it links to
-GRAPH = {
-    "A": ["B", "C"],
-    "B": ["C"],
-    "C": ["A"],
-    "D": ["C", "E"],
-    "E": [],  # dangling page (no outlinks)
-}
+from pathlib import Path
+
+# graph file (relative to this folder, a full path also works)
+graph_path = "data/graph.txt"
+
+
+def read_graph(path):
+    """Read lines like 'A: B C' into {page: [pages it links to]}."""
+    graph = {}
+    for line in (Path(__file__).parent / path).read_text(encoding="utf-8").splitlines():
+        if line.strip() and not line.startswith("#"):
+            page, _, links = line.partition(":")
+            graph[page.strip()] = links.split()
+    return graph
 
 
 def pagerank(graph, d=0.85, tol=1e-8, max_iter=100):
@@ -39,10 +45,11 @@ def pagerank(graph, d=0.85, tol=1e-8, max_iter=100):
 
 
 def main():
-    rank, iterations = pagerank(GRAPH)
+    graph = read_graph(graph_path)
+    rank, iterations = pagerank(graph)
     print(f"Converged in {iterations} iterations (sum of ranks = {sum(rank.values()):.4f})")
     for position, (page, score) in enumerate(sorted(rank.items(), key=lambda x: -x[1]), 1):
-        print(f"  {position}. page {page}: {score:.4f}  (in-links: {[q for q in GRAPH if page in GRAPH[q]]})")
+        print(f"  {position}. page {page}: {score:.4f}  (in-links: {[q for q in graph if page in graph[q]]})")
 
 
 if __name__ == "__main__":

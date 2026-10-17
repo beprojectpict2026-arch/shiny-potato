@@ -1,0 +1,14 @@
+<pages>
+  <page id="p1"><title>Cricket World Cup</title><topic>sports</topic>
+    <text>India wins the cricket match</text><link>p2</link><link>p5</link></page>
+  <page id="p2"><title>Football League</title><topic>sports</topic>
+    <text>Goals and football fans</text><link>p1</link></page>
+  <page id="p3"><title>Stock Market News</title><topic>finance</topic>
+    <text>Sensex rises as markets rally</text><link>p1</link><link>p4</link></page>
+  <page id="p4"><title>Banking Update</title><topic>finance</topic>
+    <text>Interest rates and loans</text><link>p3</link></page>
+  <page id="p5"><title>Olympic Games</title><topic>sports</topic>
+    <text>Athletes and medals</text><link>p1</link><link>p2</link></page>
+  <page id="p6"><title>Tech Gadgets</title><topic>technology</topic>
+    <text>New phones launched</text><link>p3</link><link>p1</link></page>
+</pages>

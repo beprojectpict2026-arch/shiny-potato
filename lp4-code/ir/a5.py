@@ -6,33 +6,20 @@ surfer teleports only to pages about the chosen topic. Compare with ordinary Pag
 
 New libs used (all standard library): xml.etree.ElementTree (XML parsing).
 
-Driver: an embedded XML of 6 pages is parsed; ordinary PageRank and PageRank biased to
-the topic "sports" are printed side by side. No input is taken at runtime.
+Input: the XML file named in xml_path (data/pages.xml, 6 pages) is parsed; ordinary PageRank
+and PageRank biased to the topic "sports" are printed side by side.
 """
 
 import xml.etree.ElementTree as ET
+from pathlib import Path
 
-XML_DATA = """
-<pages>
-  <page id="p1"><title>Cricket World Cup</title><topic>sports</topic>
-    <text>India wins the cricket match</text><link>p2</link><link>p5</link></page>
-  <page id="p2"><title>Football League</title><topic>sports</topic>
-    <text>Goals and football fans</text><link>p1</link></page>
-  <page id="p3"><title>Stock Market News</title><topic>finance</topic>
-    <text>Sensex rises as markets rally</text><link>p1</link><link>p4</link></page>
-  <page id="p4"><title>Banking Update</title><topic>finance</topic>
-    <text>Interest rates and loans</text><link>p3</link></page>
-  <page id="p5"><title>Olympic Games</title><topic>sports</topic>
-    <text>Athletes and medals</text><link>p1</link><link>p2</link></page>
-  <page id="p6"><title>Tech Gadgets</title><topic>technology</topic>
-    <text>New phones launched</text><link>p3</link><link>p1</link></page>
-</pages>
-"""
+# XML file (relative to this folder, a full path also works)
+xml_path = "data/pages.xml"
 
 
-def parse(xml_text):
-    """Return (titles, topics, graph) from the XML document."""
-    root = ET.fromstring(xml_text)
+def parse(path):
+    """Return (titles, topics, graph) from the XML file."""
+    root = ET.parse(Path(__file__).parent / path).getroot()
     titles, topics, graph = {}, {}, {}
     for page in root.findall("page"):
         pid = page.get("id")
@@ -56,7 +43,7 @@ def pagerank(graph, teleport, d=0.85, iterations=100):
 
 
 def main():
-    titles, topics, graph = parse(XML_DATA)
+    titles, topics, graph = parse(xml_path)
     n = len(graph)
     print(f"Parsed {n} pages, {sum(len(v) for v in graph.values())} links. Web graph:")
     for p, outs in graph.items():

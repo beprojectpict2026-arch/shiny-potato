@@ -1,0 +1,14 @@
+Received: from mail-out.example.com (mail-out.example.com [203.0.113.10])
+ by mx.pict.edu (Postfix) with ESMTPS id A1; Tue, 13 Oct 2026 10:00:05 +0530
+Received: from [192.168.1.5] (unknown [198.51.100.7])
+ by mail-out.example.com with ESMTPSA id B2; Tue, 13 Oct 2026 10:00:01 +0530
+Authentication-Results: mx.pict.edu; spf=pass smtp.mailfrom=example.com;
+ dkim=pass header.d=example.com; dmarc=pass header.from=example.com
+From: Alice <alice@example.com>
+Return-Path: <alice@example.com>
+To: student@pict.edu
+Subject: Lab schedule
+Date: Tue, 13 Oct 2026 10:00:00 +0530
+Message-ID: <abc123@example.com>
+
+Hello

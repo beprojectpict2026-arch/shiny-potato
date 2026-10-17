@@ -7,17 +7,16 @@ characters, using the map -> shuffle -> reduce model.
 New libs used (all standard library): multiprocessing.Pool (parallel map workers),
 collections.defaultdict (shuffle/group by key).
 
-Driver: an embedded dataset is split into 3 chunks, mapped in parallel, shuffled
-and reduced; the result is cross-checked with collections.Counter.
-No input is taken at runtime.
+Input: the text file named in dataset_path (data/dataset.txt) is split into 3 chunks, mapped
+in parallel, shuffled and reduced; the result is cross-checked with collections.Counter.
 """
 
 from collections import Counter, defaultdict
 from multiprocessing import Pool
+from pathlib import Path
 
-DATASET = """Information Retrieval deals with finding material of an unstructured nature
-that satisfies an information need from within large collections. 123 !!! Map-Reduce
-processes big data in parallel: MAP emits (key, 1) pairs and REDUCE sums them."""
+# dataset file (relative to this folder, a full path also works)
+dataset_path = "data/dataset.txt"
 
 
 def mapper(chunk):
@@ -47,7 +46,8 @@ def split(text, parts):
 
 
 def main():
-    chunks = split(DATASET, 3)
+    dataset = (Path(__file__).parent / dataset_path).read_text(encoding="utf-8")
+    chunks = split(dataset, 3)
     with Pool(3) as pool:
         mapped = pool.map(mapper, chunks)
         counts = dict(pool.map(reducer, shuffle(mapped).items()))
@@ -55,7 +55,7 @@ def main():
     print(f"{len(chunks)} input splits, {sum(len(m) for m in mapped)} (key, 1) pairs emitted")
     for letter in sorted(counts):
         print(f"  {letter}: {counts[letter]}")
-    expected = Counter(ch.lower() for ch in DATASET if ch.isalpha())
+    expected = Counter(ch.lower() for ch in dataset if ch.isalpha())
     print("Matches Counter check:", counts == dict(expected))
 
 

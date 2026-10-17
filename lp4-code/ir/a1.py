@@ -6,18 +6,23 @@ similarity (on raw term frequency and on TF-IDF weights) and Jaccard similarity.
 
 New libs used (all standard library): re, math, collections.Counter.
 
-Driver: three embedded documents are compared pairwise. No input is taken at runtime.
+Input: three text files (data/doc1.txt, doc2.txt, doc3.txt, set in doc_paths) are read and
+compared pairwise. Change doc_paths to compare your own documents.
 """
 
 import math
 import re
 from collections import Counter
+from pathlib import Path
 
 STOP_WORDS = {"a", "an", "the", "is", "are", "of", "in", "on", "to", "and", "for", "it", "that", "this", "with", "as", "by"}
 
-DOC1 = "Information retrieval is the process of finding relevant documents in a large collection of text."
-DOC2 = "Retrieval of relevant documents from a large text collection is the goal of information retrieval systems."
-DOC3 = "Cricket is a bat and ball game played between two teams of eleven players."
+# documents to compare (relative to this folder, full paths also work)
+doc_paths = ["data/doc1.txt", "data/doc2.txt", "data/doc3.txt"]
+
+
+def read_file(path):
+    return (Path(__file__).parent / path).read_text(encoding="utf-8")
 
 
 def tokenize(text):
@@ -55,9 +60,10 @@ def compare(name, d1, d2):
 
 
 def main():
-    compare("Doc1 vs Doc2 (same topic)     ", DOC1, DOC2)
-    compare("Doc1 vs Doc3 (different topic)", DOC1, DOC3)
-    compare("Doc1 vs Doc1 (identical)      ", DOC1, DOC1)
+    d1, d2, d3 = (read_file(p) for p in doc_paths)
+    compare("Doc1 vs Doc2 (same topic)     ", d1, d2)
+    compare("Doc1 vs Doc3 (different topic)", d1, d3)
+    compare("Doc1 vs Doc1 (identical)      ", d1, d1)
 
 
 if __name__ == "__main__":
