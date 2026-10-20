@@ -14,7 +14,7 @@ from urllib.parse import urlparse
 import scrapy
 from scrapy.crawler import CrawlerProcess
 
-SEED_URL = "https://books.toscrape.com/"   # change this to crawl another site
+SEED_URL = "https://en.wikipedia.org/wiki/Picts"   # change this to crawl another site
 MAX_DEPTH = 2
 MAX_PAGES = 30
 
