@@ -2,7 +2,7 @@
 
 | Folder | Subject | Language / tool | How to run |
 |---|---|---|---|
-| `daa/` | Design and Analysis of Algorithms (A1-A5 + mini-project: Naive vs Rabin-Karp) | C++17 | `g++ -std=c++17 -O2 a1.cpp -o a1` then `./a1` (Windows: `a1.exe`) |
+| `daa/` | Design and Analysis of Algorithms (A1-A5 + mini-project: merge sort vs multithreaded merge sort) | C++17 | `g++ -std=c++17 -O2 a1.cpp -o a1` (mini-project: add `-pthread`) then `./a1` (Windows: `a1.exe`) |
 | `ml/` | Machine Learning (B1-B5 + mini-project: Titanic survival) | Jupyter notebooks, Python | `uv sync` then `uv run jupyter lab`, open a notebook, *Run All* |
 | `bt/` | Blockchain Technology (C1-C5 + mini-project: e-voting) | Solidity, Remix IDE, MetaMask | Open the `.sol` file in [Remix](https://remix.ethereum.org), compile, deploy; see the guides |
 
