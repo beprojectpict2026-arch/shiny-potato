@@ -12,56 +12,52 @@
  *
  * Compile and run:  g++ -std=c++17 -O2 a3.cpp -o a3 && ./a3
  */
-#include <algorithm>
-#include <iomanip>
+
 #include <iostream>
-#include <string>
-#include <vector>
+#include <algorithm>
 using namespace std;
 
-int main() {
-    vector<string> names = {"Mirror", "Silver nugget", "Painting", "Vase"};
-    vector<int> weight = {2, 3, 4, 5};
-    vector<int> value = {3, 4, 5, 6};
-    int n = names.size(), capacity = 5;
+// Function to calculate maximum profit
+int knapsack(int n, int W, int wt[], int val[])
+{
+    int dp[101][101] = {0};
 
-    // table[i][j] = best value using the first i items with capacity j (row 0 / column 0 stay 0)
-    vector<vector<int>> table(n + 1, vector<int>(capacity + 1, 0));
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= capacity; j++) {
-            table[i][j] = table[i - 1][j];                       // skip item i
-            if (weight[i - 1] <= j)                              // or take it, if it fits
-                table[i][j] = max(table[i][j], value[i - 1] + table[i - 1][j - weight[i - 1]]);
+    for(int i = 1; i <= n; i++)
+    {
+        for(int j = 1; j <= W; j++)
+        {
+            if(wt[i-1] <= j)
+                dp[i][j] = max(dp[i-1][j],
+                    val[i-1] + dp[i-1][j-wt[i-1]]);
+            else
+                dp[i][j] = dp[i-1][j];
         }
     }
 
-    cout << "Capacity = " << capacity << " kg\nDP table T(i, j): rows = items 0..n, columns = capacity 0..W\n";
-    cout << setw(8) << "";
-    for (int j = 0; j <= capacity; j++) cout << setw(4) << j;
-    cout << "\n";
-    for (int i = 0; i <= n; i++) {
-        cout << setw(8) << (i == 0 ? string("none") : "item " + to_string(i));
-        for (int j = 0; j <= capacity; j++) cout << setw(4) << table[i][j];
-        cout << "\n";
-    }
+    return dp[n][W];
+}
 
-    // trace back from the last cell: if the value changed from the row above, item i was taken
-    vector<int> chosen;
-    int j = capacity;
-    for (int i = n; i >= 1; i--) {
-        if (table[i][j] != table[i - 1][j]) {
-            chosen.push_back(i);
-            j -= weight[i - 1];
-        }
-    }
-    reverse(chosen.begin(), chosen.end());
+int main()
+{
+    int n, W;
+    int wt[100], val[100];
 
-    int totalWeight = 0;
-    cout << "\nMaximum value = " << table[n][capacity] << "\nItems taken:\n";
-    for (int i : chosen) {
-        cout << "  " << names[i - 1] << " (weight " << weight[i - 1] << ", value " << value[i - 1] << ")\n";
-        totalWeight += weight[i - 1];
-    }
-    cout << "Total weight = " << totalWeight << "\n";
+    cout << "Enter number of items: ";
+    cin >> n;
+
+    cout << "Enter weights:\n";
+    for(int i = 0; i < n; i++)
+        cin >> wt[i];
+
+    cout << "Enter values:\n";
+    for(int i = 0; i < n; i++)
+        cin >> val[i];
+
+    cout << "Enter capacity: ";
+    cin >> W;
+
+    cout << "Maximum Profit = "
+         << knapsack(n, W, wt, val);
+
     return 0;
 }

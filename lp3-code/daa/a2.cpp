@@ -1,101 +1,111 @@
 /*
- * DAA Assignment 2 - Huffman encoding using a greedy strategy.
+ * DAA Assignment 2 - Huffman Encoding (Greedy Approach)
  *
- * Problem statement: build a Huffman tree by repeatedly merging the two least frequent nodes
- * (greedy choice, using a min-heap), derive the prefix codes, then encode and decode text.
- * Time complexity O(n log n) for n distinct characters.
- * Libraries used (standard library only): <queue> (priority_queue as min-heap), <map>, <vector>.
+ * Concepts:
+ * 1. Greedy choice: Repeatedly pick 2 nodes with lowest frequency using Min-Heap.
+ * 2. Tree creation: Merge them into a parent node with sum of their frequencies.
+ * 3. Assign codes: Left edge = '0', Right edge = '1'.
  *
- * Driver: (1) the manual's example a:5 b:9 c:12 d:13 e:16 f:45, (2) the text "huffman coding".
- * No input is taken at runtime.
- *
- * Compile and run:  g++ -std=c++17 -O2 a2.cpp -o a2 && ./a2
+ * Time Complexity: O(n log n)
+ * Space Complexity: O(n)
+
+ ```
+Enter number of characters: 4
+
+Enter character and frequency:
+A 1
+B 2
+C 3
+D 4
+```
  */
+
+
 #include <iostream>
-#include <map>
 #include <queue>
-#include <string>
-#include <vector>
+#include<vector>
 using namespace std;
 
 struct Node {
+    char ch;
     int freq;
-    char symbol;    // meaningful only for leaves
-    int left, right;  // indices into the node pool, -1 for a leaf
+    Node *left, *right;
+
+    Node(char c, int f) {
+        ch = c;
+        freq = f;
+        left = right = NULL;
+    }
 };
 
-vector<Node> pool;  // all tree nodes live here; children are referred to by index
-
-// Greedy step: take the two smallest nodes, merge them, push the parent back.
-int buildTree(const map<char, int>& freqs) {
-    // min-heap of (frequency, node index); the index breaks ties the same way every run
-    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> heap;
-    pool.clear();
-    for (auto& [symbol, f] : freqs) {
-        pool.push_back({f, symbol, -1, -1});
-        heap.push({f, (int)pool.size() - 1});
+// Min Heap
+struct Compare {
+    bool operator()(Node* a, Node* b) {
+        return a->freq > b->freq;
     }
-    while (heap.size() > 1) {
-        int a = heap.top().second; heap.pop();
-        int b = heap.top().second; heap.pop();
-        pool.push_back({pool[a].freq + pool[b].freq, '#', a, b});
-        heap.push({pool.back().freq, (int)pool.size() - 1});
-    }
-    return heap.top().second;  // root
-}
+};
 
-// Left edge = 0, right edge = 1; the path to a leaf is its code.
-void makeCodes(int node, const string& prefix, map<char, string>& codes) {
-    if (pool[node].left == -1) {
-        codes[pool[node].symbol] = prefix.empty() ? "0" : prefix;
+// Print Huffman Codes
+void printCodes(Node* root, string code) {
+    if (root == NULL)
+        return;
+
+    if (root->left == NULL && root->right == NULL) {
+        cout << root->ch << " : " << code << endl;
         return;
     }
-    makeCodes(pool[node].left, prefix + "0", codes);
-    makeCodes(pool[node].right, prefix + "1", codes);
+
+    printCodes(root->left, code + "0");
+    printCodes(root->right, code + "1");
 }
 
-string encode(const string& text, const map<char, string>& codes) {
-    string bits;
-    for (char c : text) bits += codes.at(c);
-    return bits;
-}
+void printTree(Node* root, int space = 0) {
+    if (root == NULL)
+        return;
 
-string decode(const string& bits, int root) {
-    string out;
-    int node = root;
-    for (char bit : bits) {
-        node = (bit == '0') ? pool[node].left : pool[node].right;
-        if (pool[node].left == -1) {  // reached a leaf
-            out += pool[node].symbol;
-            node = root;
-        }
-    }
-    return out;
+    space += 5;
+
+    // Print right subtree
+    printTree(root->right, space);
+
+    // Print current node
+    cout << endl;
+    for (int i = 5; i < space; i++)
+        cout << " ";
+
+    cout << root->ch << "(" << root->freq << ")";
+
+    // Print left subtree
+    printTree(root->left, space);
 }
 
 int main() {
-    map<char, int> freqs = {{'a', 5}, {'b', 9}, {'c', 12}, {'d', 13}, {'e', 16}, {'f', 45}};
-    int root = buildTree(freqs);
-    map<char, string> codes;
-    makeCodes(root, "", codes);
-    cout << "Example from the manual:\n";
-    int totalBits = 0, totalFreq = 0;
-    for (auto& [symbol, f] : freqs) {
-        cout << "  " << symbol << ": freq=" << f << "  code=" << codes[symbol] << "\n";
-        totalBits += f * (int)codes[symbol].size();
-        totalFreq += f;
-    }
-    cout << "  total bits: " << totalBits << " vs fixed 3-bit: " << 3 * totalFreq << "\n";
+    int n;
+    cout << "Enter number of characters: ";
+    cin >> n;
 
-    string text = "huffman coding";
-    map<char, int> textFreqs;
-    for (char c : text) textFreqs[c]++;
-    root = buildTree(textFreqs);
-    codes.clear();
-    makeCodes(root, "", codes);
-    string bits = encode(text, codes);
-    cout << "\nText '" << text << "': " << text.size() * 8 << " bits as ASCII -> " << bits.size()
-         << " bits with Huffman\n  encoded: " << bits << "\n  decoded: " << decode(bits, root)
-         << "\n  round trip OK: " << (decode(bits, root) == text ? "true" : "false") << "\n";
+    priority_queue<Node*, vector<Node*>, Compare> pq;
+    char ch;
+    int freq;
+    
+    cout << "Enter character and frequency:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> ch >> freq;
+        pq.push(new Node(ch, freq));
+    }
+
+    while (pq.size() > 1) {
+        Node* left = pq.top();
+        pq.pop();
+        Node* right = pq.top();
+        pq.pop();
+        Node* parent = new Node('$', left->freq + right->freq);
+        parent->left = left;
+        parent->right = right;
+        pq.push(parent);
+    }
+
+    cout << "\nHuffman Codes:\n";
+    printCodes(pq.top(), "");
     return 0;
 }

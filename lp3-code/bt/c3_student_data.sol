@@ -47,8 +47,7 @@ contract StudentData {
         return students.length;
     }
 
-    // fallback: runs when the contract is called with data that matches no function, or when
-    // ETH is sent with no data (there is no receive() function in this contract).
+
     fallback() external payable {
         fallbackCalls += 1;
         emit FallbackCalled(msg.sender, msg.value, msg.data);

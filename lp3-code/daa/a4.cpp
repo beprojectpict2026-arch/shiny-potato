@@ -1,62 +1,83 @@
 /*
- * DAA Assignment 4 - N-Queens with the first queen already placed (backtracking).
+ * DAA Assignment 4 - N-Queens with the first queen already placed.
+ * Using Hash Sets / Boolean lookup arrays for O(1) safety checks.
  *
- * Problem statement: on an N x N board the first queen is fixed in row 0 at a given column;
- * place the remaining N-1 queens row by row using backtracking (try a safe column, recurse,
- * undo the choice on failure) so no two queens attack each other, then print the final board.
- * Libraries used (standard library only): <iostream>, <vector>.
- *
- * Driver: N=8 with the first queen in column 3, N=6 with column 1, and N=4 with column 0
- * (which has no solution). No input is taken at runtime.
- *
- * Compile and run:  g++ -std=c++17 -O2 a4.cpp -o a4 && ./a4
+ * Diagonals formula:
+ * 1. Major diagonal (\): row - col + (n - 1)
+ * 2. Minor diagonal (/): row + col
  */
-#include <cstdlib>
 #include <iostream>
 #include <vector>
 using namespace std;
 
-// board[r] = column of the queen in row r (-1 = empty)
-bool isSafe(const vector<int>& board, int row, int col) {
-    for (int r = 0; r < row; r++) {
-        // same column, or same diagonal (row distance equals column distance)
-        if (board[r] == col || abs(board[r] - col) == row - r) return false;
+int n;
+vector<vector<int>> board;
+vector<bool> cols;         // tracks occupied columns
+vector<bool> diag1;        // tracks major diagonal (\) : row - col + (n - 1)
+vector<bool> diag2;        // tracks minor diagonal (/) : row + col
+
+void printBoard() {
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cout << (board[i][j] ? "Q " : ". ");
+        }
+        cout << "\n";
     }
-    return true;
 }
 
-bool place(vector<int>& board, int row, int n) {
-    if (row == n) return true;               // all queens placed
+bool solve(int row) {
+    // Base Case: All queens are successfully placed
+    if (row == n) return true;
+
     for (int col = 0; col < n; col++) {
-        if (isSafe(board, row, col)) {
-            board[row] = col;
-            if (place(board, row + 1, n)) return true;
-            board[row] = -1;                 // backtrack: undo and try the next column
+        // O(1) check using lookup arrays
+        if (!cols[col] && !diag1[row - col + n - 1] && !diag2[row + col]) {
+            // Place Queen & mark sets
+            board[row][col] = 1;
+            cols[col] = true;
+            diag1[row - col + n - 1] = true;
+            diag2[row + col] = true;
+
+            // Recurse to next row
+            if (solve(row + 1)) return true;
+
+            // Backtrack: Unmark
+            board[row][col] = 0;
+            cols[col] = false;
+            diag1[row - col + n - 1] = false;
+            diag2[row + col] = false;
         }
     }
     return false;
 }
 
 int main() {
-    int tests[3][2] = {{8, 3}, {6, 1}, {4, 0}};  // {N, column of the first queen}
-    for (auto& t : tests) {
-        int n = t[0], firstCol = t[1];
-        cout << "N = " << n << ", first queen at row 0, column " << firstCol << ":\n";
-        vector<int> board(n, -1);
-        board[0] = firstCol;                 // the first queen is given
-        if (place(board, 1, n)) {
-            for (int r = 0; r < n; r++) {
-                cout << "  ";
-                for (int c = 0; c < n; c++) cout << (board[r] == c ? "Q " : ". ");
-                cout << "\n";
-            }
-            cout << "  queen columns per row:";
-            for (int c : board) cout << " " << c;
-            cout << "\n";
-        } else {
-            cout << "  no solution exists with the first queen there\n";
-        }
-        cout << "\n";
+    cout << "Enter board size (N): ";
+    cin >> n;
+
+    int firstCol;
+    cout << "Enter column for 1st Queen in row 0 (0 to " << n - 1 << "): ";
+    cin >> firstCol;
+
+    // Initialize board and lookup sets
+    board.assign(n, vector<int>(n, 0));
+    cols.assign(n, false);
+    diag1.assign(2 * n, false);
+    diag2.assign(2 * n, false);
+
+    // Place the 1st Queen manually in row 0
+    board[0][firstCol] = 1;
+    cols[firstCol] = true;
+    diag1[0 - firstCol + n - 1] = true;
+    diag2[0 + firstCol] = true;
+
+    // Start solving from row 1 onwards
+    if (solve(1)) {
+        cout << "\nSolution:\n";
+        printBoard();
+    } else {
+        cout << "\nNo solution exists with 1st Queen at row 0, column " << firstCol << ".\n";
     }
+
     return 0;
 }

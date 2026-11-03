@@ -1,0 +1,38 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import (f1_score,accuracy_score,recall_score,precision_score,confusion_matrix,classification_report)
+from sklearn.cluster import KMeans 
+from scipy.cluster.hierarchy import linkage,dendrogram
+from sklearn.preprocessing import StandardScaler
+df=pd.read_csv("Downloads/sales_data_sample.csv",encoding="latin1")
+# df.info(
+X = df[["QUANTITYORDERED","SALES"]]
+X_Scaled = StandardScaler().fit_transform(X)
+wcss=[]
+for i in range(1,11):
+    kmeans = KMeans(n_clusters = i,random_state = 42,n_init=10)
+    kmeans.fit(X_Scaled)
+    wcss.append(kmeans.inertia_)
+
+plt.plot(wcss,marker="o")
+plt.xlabel("no of cluster")
+plt.ylabel("distance")
+plt.title("Elbow method")
+plt.show()
+kmeans = KMeans(n_clusters = 3,random_state = 42,n_init=10)
+df["kmeans_cluster"] = kmeans.fit_predict(X_Scaled) 
+plt.scatter(X["QUANTITYORDERED"],X["SALES"],c=df["kmeans_cluster"])
+plt.title("K-Means Clustering")
+plt.xlabel("QUANTITYORDERED")
+plt.ylabel("SALES")
+plt.show()
+z = linkage(X_Scaled,method="ward")
+plt.figure()
+dendrogram(z,truncate_mode = "lastp",p=30)
+
+plt.title("Hierarchical clustering")
+plt.xlabel("data points")
+plt.ylabel("distance")
+plt.show()

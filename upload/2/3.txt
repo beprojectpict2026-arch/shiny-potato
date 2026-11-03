@@ -1,0 +1,19 @@
+# Implement Gradient Descent to find a local minimum of y = (x + 3)² starting at x = 2.
+import numpy as np
+import matplotlib.pyplot as plt
+
+x = 2
+lr = 0.1
+for i in range(100):
+    grad = 2 * (x + 3)
+    x = x - lr * grad
+
+print("Minimum x:", x)
+print("Minimum y:", (x + 3)**2)
+
+X = np.linspace(-60, 60, 100)
+Y = (X + 3)**2
+
+plt.plot(X, Y)
+plt.scatter(x, (x + 3)**2, color='red')
+plt.show()

@@ -1,0 +1,25 @@
+# build a neural network, MLP
+import pandas as pd
+import numpy as np
+
+df=pd.read_csv('/content/Churn_Modelling.csv')
+df.info()
+df.drop(['RowNumber', 'CustomerId', 'Surname'], axis=1, inplace=True)
+
+from sklearn.model_selection import train_test_split
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import classification_report, confusion_matrix
+from sklearn.preprocessing import StandardScaler
+x=df.drop('Exited', axis=1)
+y=df['Exited']
+x=pd.get_dummies(x, columns=['Geography', 'Gender'], drop_first=True) # perform a one-hot encoding on geography and gender, as MLP can't underdtand Male, Female, France.
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+mlp = MLPClassifier(hidden_layer_sizes=(16, 8), max_iter=100,early_stopping=True, random_state=42).fit(x_train, y_train) #imp line, write on eraser
+y_pred = mlp.predict(x_test)
+print(classification_report(y_test, y_pred))
+cm = confusion_matrix(y_test, y_pred)
+sns.heatmap(cm, annot=True, fmt=".2f", xticklabels=["stay", "not stay"], yticklabels=["stay", "not stay"], cmap="Blues")
+plt.show()

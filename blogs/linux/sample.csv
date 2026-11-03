@@ -1,0 +1,9 @@
+timestamp,service,status_code,response_time_ms,endpoint
+2026-10-30 10:15:20,auth-service,200,45,/login
+2026-10-30 10:15:22,auth-service,401,120,/login
+2026-10-30 10:15:30,payment-service,500,850,/charge
+2026-10-30 10:16:01,user-service,200,32,/profile
+2026-10-30 10:16:15,order-service,200,68,/orders
+2026-10-30 10:16:40,payment-service,503,1200,/charge
+2026-10-30 10:17:02,user-service,404,25,/users/99
+2026-10-30 10:17:18,order-service,200,55,/checkout

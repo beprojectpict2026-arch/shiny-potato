@@ -1,0 +1,37 @@
+# Email classifier using KNeighborsClassifier and SVC
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+import numpy as np
+import pandas as pd
+
+df = pd.read_csv('/content/emails.csv')
+# df.columns
+X = df.drop(["Email No.", "Prediction"], axis=1)
+Y = df["Prediction"]
+x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=42)
+
+knn = make_pipeline(StandardScaler(), KNeighborsClassifier(n_neighbors=5))
+knn.fit(x_train, y_train)
+knn_pred = knn.predict(x_test)
+
+svm = make_pipeline(StandardScaler(), SVC(kernel="linear"))
+svm.fit(x_train, y_train)
+svm_pred = svm.predict(x_test)
+
+from sklearn.metrics import classification_report
+print("--KNN--")
+print(classification_report(y_test, knn_pred))
+print("--SVM--")
+print(classification_report(y_test, svm_pred))
+
+from sklearn.metrics import confusion_matrix
+cm1 = confusion_matrix(y_test, knn_pred)
+sns.heatmap(cm1, annot=True, fmt="d")
+plt.show()
+
+cm2= confusion_matrix(y_test, svm_pred)
+sns.heatmap(cm2, annot=True, fmt="d")
+plt.show()
