@@ -62,20 +62,20 @@ PageRank is an algorithm developed by Google to measure the importance of web pa
 
 **PageRank formula:**
 
-\[
+$$
 PR(A)=\frac{1-d}{N}
 +d\sum_{T_i\in In(A)}
 \frac{PR(T_i)}{C(T_i)}
-\]
+$$
 
 Where:
 
-- \(PR(A)\): PageRank of page A.
-- \(d\): Damping factor, generally 0.85.
-- \(N\): Total number of pages.
-- \(In(A)\): Pages linking to A.
-- \(PR(T_i)\): PageRank of the linking page.
-- \(C(T_i)\): Number of outgoing links from page \(T_i\).
+- $PR(A)$: PageRank of page A.
+- $d$: Damping factor, generally 0.85.
+- $N$: Total number of pages.
+- $In(A)$: Pages linking to A.
+- $PR(T_i)$: PageRank of the linking page.
+- $C(T_i)$: Number of outgoing links from page $T_i$.
 
 **What is the damping factor?**
 
@@ -124,30 +124,30 @@ It gives higher importance to words that occur frequently in a particular docume
 
 TF measures how frequently a term occurs in a document.
 
-\[
+$$
 TF(t,d)=\frac{f_{t,d}}{\text{Total number of terms in }d}
-\]
+$$
 
 Where:
-- \(f_{t,d}\): Frequency of term \(t\) in document \(d\).
+- $f_{t,d}$: Frequency of term $t$ in document $d$.
 
 ### B. Inverse Document Frequency (IDF)
 
 IDF measures how rare or common a term is across all documents.
 
-\[
+$$
 IDF(t)=\log\left(\frac{N}{DF(t)}\right)
-\]
+$$
 
 Where:
-- \(N\): Total number of documents.
-- \(DF(t)\): Number of documents containing term \(t\).
+- $N$: Total number of documents.
+- $DF(t)$: Number of documents containing term $t$.
 
 ### C. TF-IDF Formula
 
-\[
+$$
 \boxed{TFIDF(t,d)=TF(t,d)\times IDF(t)}
-\]
+$$
 
 **Example:**
 
@@ -210,61 +210,61 @@ It is commonly used to measure similarity between text documents represented as 
 
 **Formula:**
 
-\[
+$$
 \boxed{
 \text{Cosine Similarity}(A,B)=
 \frac{A\cdot B}{\|A\|\|B\|}
 }
-\]
+$$
 
 Expanded formula:
 
-\[
+$$
 \text{Cosine Similarity}(A,B)=
 \frac{\sum_{i=1}^{n} A_iB_i}
 {\sqrt{\sum_{i=1}^{n}A_i^2}
 \sqrt{\sum_{i=1}^{n}B_i^2}}
-\]
+$$
 
 **Example:**
 
 Let:
 
-\[
+$$
 A=(1,1,0)
-\]
+$$
 
-\[
+$$
 B=(1,0,1)
-\]
+$$
 
 Dot product:
 
-\[
+$$
 A\cdot B=(1\times1)+(1\times0)+(0\times1)=1
-\]
+$$
 
 Magnitude of A:
 
-\[
+$$
 \|A\|=\sqrt{1^2+1^2+0^2}=\sqrt{2}
-\]
+$$
 
 Magnitude of B:
 
-\[
+$$
 \|B\|=\sqrt{1^2+0^2+1^2}=\sqrt{2}
-\]
+$$
 
 Therefore:
 
-\[
+$$
 \text{Similarity}=\frac{1}{\sqrt{2}\times\sqrt{2}}
-\]
+$$
 
-\[
+$$
 \boxed{\text{Similarity}=0.5}
-\]
+$$
 
 **Interpretation:**
 - 1: Completely similar vectors.
@@ -375,45 +375,45 @@ The Jaccard coefficient measures similarity between two sets by calculating the 
 
 **Formula:**
 
-\[
+$$
 \boxed{
 J(A,B)=\frac{|A\cap B|}{|A\cup B|}
 }
-\]
+$$
 
 Where:
-- \(A\cap B\): Common elements.
-- \(A\cup B\): All unique elements from both sets.
+- $A\cap B$: Common elements.
+- $A\cup B$: All unique elements from both sets.
 
 **Example:**
 
 Let:
 
-\[
+$$
 A=\{apple, banana, mango\}
-\]
+$$
 
-\[
+$$
 B=\{banana, mango, orange\}
-\]
+$$
 
 Intersection:
 
-\[
+$$
 A\cap B=\{banana,mango\}
-\]
+$$
 
 Union:
 
-\[
+$$
 A\cup B=\{apple,banana,mango,orange\}
-\]
+$$
 
 Therefore:
 
-\[
+$$
 J(A,B)=\frac{2}{4}=\boxed{0.5}
-\]
+$$
 
 **Difference between Jaccard and Cosine Similarity:**
 
@@ -432,31 +432,31 @@ Evaluation metrics measure how effectively an information retrieval system retri
 
 Precision measures how many retrieved documents are actually relevant.
 
-\[
+$$
 \boxed{
 Precision=\frac{TP}{TP+FP}
 }
-\]
+$$
 
 ### B. Recall
 
 Recall measures how many relevant documents were successfully retrieved.
 
-\[
+$$
 \boxed{
 Recall=\frac{TP}{TP+FN}
 }
-\]
+$$
 
 ### C. F1 Score
 
 F1 score is the harmonic mean of precision and recall.
 
-\[
+$$
 \boxed{
 F1=2\times\frac{Precision\times Recall}{Precision+Recall}
 }
-\]
+$$
 
 Where:
 - TP: True Positives.
@@ -472,21 +472,21 @@ Suppose:
 
 Then:
 
-\[
+$$
 Precision=\frac{8}{10}=0.8
-\]
+$$
 
-\[
+$$
 Recall=\frac{8}{20}=0.4
-\]
+$$
 
-\[
+$$
 F1=2\times\frac{0.8\times0.4}{0.8+0.4}
-\]
+$$
 
-\[
+$$
 \boxed{F1=0.5333}
-\]
+$$
 
 **Difference between precision and recall:**
 
@@ -629,9 +629,9 @@ Hashing is the process of converting input data of arbitrary length into a fixed
 
 A collision occurs when two different input values produce the same hash output.
 
-\[
+$$
 H(A)=H(B),\quad A\neq B
-\]
+$$
 
 A secure hash algorithm should make finding such collisions computationally infeasible.
 
@@ -657,29 +657,29 @@ It converts input data of any size into a fixed 256-bit hash value.
 
 Because its output digest is 256 bits long.
 
-\[
+$$
 256\text{ bits}=\frac{256}{8}=32\text{ bytes}
-\]
+$$
 
 Each hexadecimal character represents 4 bits.
 
-\[
+$$
 \frac{256}{4}=64\text{ hexadecimal characters}
-\]
+$$
 
 **What is the significance of 256?**
 
 It represents the output length of the hash in bits. The theoretical output space contains:
 
-\[
+$$
 2^{256}
-\]
+$$
 
 possible hash values.
 
 **How many permutations are possible in SHA-256?**
 
-The SHA-256 output space contains \(2^{256}\) possible values. This is the number of possible output values, not the number of permutations performed internally by the algorithm.
+The SHA-256 output space contains $2^{256}$ possible values. This is the number of possible output values, not the number of permutations performed internally by the algorithm.
 
 **What is the difference between SHA-1 and SHA-2?**
 
@@ -927,76 +927,76 @@ A model is too simple to learn the underlying patterns in the data.
 
 ### 1. TF-IDF
 
-\[
+$$
 TF(t,d)=\frac{f_{t,d}}{\text{Total terms in }d}
-\]
+$$
 
-\[
+$$
 IDF(t)=\log\left(\frac{N}{DF(t)}\right)
-\]
+$$
 
-\[
+$$
 \boxed{TFIDF(t,d)=TF(t,d)\times IDF(t)}
-\]
+$$
 
 ### 2. Cosine Similarity
 
-\[
+$$
 \boxed{
 \cos\theta=
 \frac{\sum_{i=1}^{n}A_iB_i}
 {\sqrt{\sum_{i=1}^{n}A_i^2}
 \sqrt{\sum_{i=1}^{n}B_i^2}}
 }
-\]
+$$
 
 ### 3. Jaccard Coefficient
 
-\[
+$$
 \boxed{J(A,B)=\frac{|A\cap B|}{|A\cup B|}}
-\]
+$$
 
 ### 4. PageRank
 
-\[
+$$
 \boxed{
 PR(A)=\frac{1-d}{N}
 +d\sum_{T_i\in In(A)}
 \frac{PR(T_i)}{C(T_i)}
 }
-\]
+$$
 
 ### 5. Precision
 
-\[
+$$
 \boxed{Precision=\frac{TP}{TP+FP}}
-\]
+$$
 
 ### 6. Recall
 
-\[
+$$
 \boxed{Recall=\frac{TP}{TP+FN}}
-\]
+$$
 
 ### 7. F1 Score
 
-\[
+$$
 \boxed{
 F1=2\times\frac{Precision\times Recall}
 {Precision+Recall}
 }
-\]
+$$
 
 ### 8. SHA-256 Output Length
 
-\[
+$$
 256\text{ bits}=32\text{ bytes}=64\text{ hexadecimal characters}
-\]
+$$
 
-\[
+$$
 \text{Possible output values}=2^{256}
-\]
+$$
 
 ---
 
-**Revision priority:** Focus first on Log Capturing and Event Correlation, XML Parsing, PageRank, TF-IDF, SHA-256, Cosine Similarity, Web Crawlers and MapReduce. These appeared repeatedly in the collected viva responses.
+**Revision priority:** Focus first on Log Capturing and Event Correlation, XML Parsing, PageRank, TF-IDF, SHA-256, Cosine Similarity, Web Crawlers and MapReduce. These appeared repeatedly in the collected questions and are high-yield topics for viva preparation.
